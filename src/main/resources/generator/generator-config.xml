@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+
+    <!-- 一个数据库一个context -->
+    <context id="Mysql" targetRuntime="MyBatis3" defaultModelType="flat">
+        <property name="autoDelimitKeywords" value="true" />
+        <property name="beginningDelimiter" value="`" />
+        <property name="endingDelimiter" value="`" />
+
+
+        <!-- 注释 -->
+        <commentGenerator >
+            <property name="suppressAllComments" value="true"/><!-- 是否取消注释 -->
+            <!-- 是否生成注释代时间戳-->
+<!--            <property name="suppressDate" value="true" />-->
+        </commentGenerator>
+
+        <!-- jdbc连接 -->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/homenote?serverTimezone=Asia/Shanghai"
+                        userId="homenote"
+                        password="88888888" />
+
+        <!-- 类型转换 -->
+        <javaTypeResolver>
+            <!-- 是否使用bigDecimal， false可自动转化以下类型（Long, Integer, Short, etc.） -->
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- 生成实体类地址 -->
+        <javaModelGenerator targetProject="src/main/java" targetPackage="com.example.homenote.domain" />
+
+        <!-- 生成mapxml文件 -->
+        <sqlMapGenerator targetProject="src/main/resources" targetPackage="mapper" />
+
+        <!-- 生成mapxml对应client，也就是接口dao -->
+        <javaClientGenerator targetProject="src/main/java" targetPackage="com.example.homenote.mapper" type="XMLMAPPER" />
+
+        <!-- 配置表信息 -->
+        <table tableName="member" domainObjectName="Member" />
+    </context>
+</generatorConfiguration>
