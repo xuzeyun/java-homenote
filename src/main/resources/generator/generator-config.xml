@@ -39,6 +39,7 @@
         <javaClientGenerator targetProject="src/main/java" targetPackage="com.example.homenote.mapper" type="XMLMAPPER" />
 
         <!-- 配置表信息 -->
-        <table tableName="member" domainObjectName="Member" />
+<!--        <table tableName="member" domainObjectName="Member" />-->
+        <table tableName="user" domainObjectName="User" />
     </context>
 </generatorConfiguration>

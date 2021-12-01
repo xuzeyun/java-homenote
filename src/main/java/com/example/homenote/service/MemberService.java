@@ -5,6 +5,7 @@ import com.example.homenote.domain.MemberExample;
 import com.example.homenote.mapper.MemberMapper;
 import com.example.homenote.req.MemberReq;
 import com.example.homenote.res.MemberRes;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -30,6 +31,8 @@ public class MemberService {
         // 创建模糊查询
         criteria.andNameLike("%" + req.getName() + "%");
 
+        // 分页
+        // PageHelper.startPage(1, 2);
         // 查询 返回数据
         List<Member> MemberList = memberMapper.selectByExample(MemberExample);
 
@@ -51,16 +54,16 @@ public class MemberService {
         Member Member = new Member();
         BeanUtils.copyProperties(req, Member);
         if(ObjectUtils.isEmpty(req.getId())){
-//            add
+        // add
             Member.setId(UUID.randomUUID().toString().replace("-", "").toLowerCase());
             memberMapper.insert(Member);
         }else{
-//            update
+        // update
             memberMapper.updateByPrimaryKey(Member);
         }
 
     }
-    //    删除
+    // 删除
     public void delete(String id){
 
         memberMapper.deleteByPrimaryKey(id);
