@@ -2,11 +2,16 @@ package com.example.homenote.service;
 
 import com.example.homenote.domain.User;
 import com.example.homenote.domain.UserExample;
+import com.example.homenote.exception.BusinessException;
+import com.example.homenote.exception.BusinessExceptionCode;
 import com.example.homenote.mapper.UserMapper;
+import com.example.homenote.req.UserLoginReq;
 import com.example.homenote.req.UserReq;
+import com.example.homenote.res.UserLoginRes;
 import com.example.homenote.res.UserRes;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
@@ -55,18 +60,60 @@ public class UserService {
         User User = new User();
         BeanUtils.copyProperties(req, User);
         if(ObjectUtils.isEmpty(req.getId())){
-        // add
-            User.setId(UUID.randomUUID().toString().replace("-", "").toLowerCase());
-            userMapper.insert(User);
+            // add 新增
+            // 查看用户名是否存在
+            User userDB = selectByUsername(req.getUsername());
+            if(ObjectUtils.isEmpty(userDB)){
+                User.setId(UUID.randomUUID().toString().replace("-", "").toLowerCase());
+                userMapper.insert(User);
+            } else {
+                // 用户名已存在
+                throw new BusinessException(BusinessExceptionCode.USER_USERNAME_EXIST);
+            }
         }else{
-        // update
+            // update 修改
             userMapper.updateByPrimaryKey(User);
         }
-
     }
     // 删除
     public void delete(String id){
-
         userMapper.deleteByPrimaryKey(id);
+    }
+
+    /* 根据用户名查询 */
+    public User selectByUsername(String username) {
+        UserExample UserExample = new UserExample();
+//        创建 Criteria 对象
+        UserExample.Criteria criteria = UserExample.createCriteria();
+        criteria.andUsernameEqualTo(username);
+        List<User> userList = userMapper.selectByExample(UserExample);
+        if(CollectionUtils.isEmpty(userList)){
+            return null;
+        } else {
+            return userList.get(0);
+        }
+    }
+
+    /* 登录 */
+    public UserLoginRes login(UserLoginReq req) {
+        User userDb = selectByUsername(req.getUsername());
+        if(ObjectUtils.isEmpty(userDb)) {
+            // 用户名不存在
+            // 打印日志 抛出异常
+            throw new BusinessException(BusinessExceptionCode.LOGIN_USER_EXIST);
+        } else {
+            if(userDb.getPassword().equals(req.getPassword())){
+                /* 登录成功 */
+//                UserLoginRes userRes = CopyUtil.copy(userDb, UserLoginRes.class);
+                UserLoginRes res = new UserLoginRes();
+//               把 a 和 b 中相同属性进行赋值，a 赋值给 b
+                BeanUtils.copyProperties(userDb, res);
+                return res;
+            } else {
+                /* 密码不对 */
+                // 打印日志 抛出异常
+                throw new BusinessException(BusinessExceptionCode.LOGIN_USER_EXIST);
+            }
+        }
     }
 }

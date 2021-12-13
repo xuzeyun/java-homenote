@@ -22,6 +22,12 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
         <!-- 热重载 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -52,7 +58,19 @@
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>1.4.0</version>
         </dependency>
+        <!-- JWT-->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>3.5.0</version>
+        </dependency>
 
+        <!-- json -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.47</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
